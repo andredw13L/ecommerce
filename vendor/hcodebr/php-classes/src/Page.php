@@ -9,52 +9,63 @@ class Page {
 	private $tpl;
 	private $options = [];
 	private $defaults = [
+		"header"=>true,
+		"footer"=>true,
 		"data"=>[]
 	];
 
-	public function __construct($opts = array(), $tpl_dir = "/views/"){
+	public function __construct($opts = array(), $tpl_dir = "/views/")
+	{
 
-		$this->options = array_merge($this->defaults, $opts);// array_merge() para juntar dois arrays, a ordem escrita no merge dá prioridade em caso de conflito pro $opts
+		$this->defaults["data"]["session"] = $_SESSION;
 
-	$config = array(
-				"tpl_dir" => $_SERVER["DOCUMENT_ROOT"].$tpl_dir,
-				"cache_dir" => $_SERVER["DOCUMENT_ROOT"]."/views-cache/",
-				"debug" => false 
-				 );		
+		$this->options = array_merge($this->defaults, $opts);
+
+		$config = array(
+		    "base_url"      => null,
+		    "tpl_dir"       => $_SERVER['DOCUMENT_ROOT'].$tpl_dir,
+		    "cache_dir"     => $_SERVER['DOCUMENT_ROOT']."/views-cache/",
+		    "debug"         => false
+		);
 
 		Tpl::configure( $config );
 
-		$this->tpl = new Tpl;
+		$this->tpl = new Tpl();
 
-		$this->setData($this->options["data"]);
+		if ($this->options['data']) $this->setData($this->options['data']);
 
-		$this->tpl->draw("header");
+		if ($this->options['header'] === true) $this->tpl->draw("header", false);
 
 	}
 
-	private function setData($data = array()){
+	public function __destruct()
+	{
 
-		foreach ($data  as $key => $value) {
-			$this->tpl->assign($key, $value);
- 		}
-	} 
+		if ($this->options['footer'] === true) $this->tpl->draw("footer", false);
 
-	//$returnHTML se quiser retornar um HTML e já jogar na tela,  no caso foi declarado como false(não)
-	public function setTpl($name ,$data =  array(), $returnHTML = false){
+	}
 
+	private function setData($data = array())
+	{
+
+		foreach($data as $key => $val)
+		{
+
+			$this->tpl->assign($key, $val);
+
+		}
+
+	}
+
+	public function setTpl($tplname, $data = array(), $returnHTML = false)
+	{
 
 		$this->setData($data);
 
-		return $this->tpl->draw($name, $returnHTML);
-
-	} 
-	public function __destruct(){
-
-		$this->tpl->draw("footer");
+		return $this->tpl->draw($tplname, $returnHTML);
 
 	}
 
- 
 }
 
-?>
+ ?>
