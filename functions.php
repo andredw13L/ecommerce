@@ -2,6 +2,7 @@
 
 use \Hcode\Model\User;
 
+
 function post($key)
 {
 	return str_replace("'", "", $_POST[$key]);
