@@ -9,7 +9,7 @@ use \Hcode\Mailer;
 class Category extends Model {
 
 	protected $fields = [
-		"idcategory", "descategory", ":idproduct"
+		"idcategory", "descategory", ":idproduct", "nrtotal"
 	];
 
 	public static function listAll()
