@@ -216,19 +216,16 @@ $app->get("/admin/users/:iduser", function($iduser){
 
 });
 
-$app->post("/admin/users/create", function(){
+
+$app->post("/admin/users/create", function() {
 
 	User::verifyLogin();
 
 	$user = new User();
 
-	$_POST["inadmin"] = (isset($_POST["inadmin"])) ? 1 : 0;
+	$_POST["inadmin"] = (isset($_POST["inadmin"]))?1:0;
 
-	 $_POST['despassword'] = password_hash($_POST["despassword"], PASSWORD_DEFAULT, [
-
- 		"cost"=>12
-
- 	]);
+	$_POST['despassword'] = User::getPasswordHash($_POST['despassword']);
 
 	$user->setData($_POST);
 
@@ -847,20 +844,82 @@ $app->post("/checkout", function(){
 	$order = new Order();
 
 	$order->setData([
-		'idcart'=>$idcart->getidcart(),
-		'idadress'=>$address->getidadress(),
+		'idcart'=>$cart->getidcart(),
+		'idaddress'=>$address->getidaddress(),
 		'iduser'=>$user->getiduser(),
 		'idstatus'=>OrderStatus::EM_ABERTO,
 		'vltotal'=>$cart->getvltotal()
-
 	]);
 
-	header("Location: /order/ ". $order->getidorder());
+	$order->save();
+
+	switch ((int)$_POST['payment-method']) {
+
+		case 1:
+		header("Location: /order/".$order->getidorder()."/pagseguro");
+		break;
+
+		case 2:
+		header("Location: /order/".$order->getidorder()."/paypal");
+		break;
+
+	}
+
 	exit;
+
+});
+
+$app->get("/order/:idorder/pagseguro", function($idorder){
+
+	User::verifyLogin(false);
+
+	$order = new Order();
+
+	$order->get((int)$idorder);
+
+	$cart = $order->getCart();
+
+	$page = new Page([
+		'header'=>false,
+		'footer'=>false
+	]);
+
+	$page->setTpl("payment-pagseguro", [
+		'order'=>$order->getValues(),
+		'cart'=>$cart->getValues(),
+		'products'=>$cart->getProducts(),
+		'phone'=>[
+			'areaCode'=>substr($order->getnrphone(), 0, 2),
+			'number'=>substr($order->getnrphone(), 2, strlen($order->getnrphone()))
+		]
+	]);
 
 
 });
 
+$app->get("/order/:idorder/paypal", function($idorder){
+
+	User::verifyLogin(false);
+
+	$order = new Order();
+
+	$order->get((int)$idorder);
+
+	$cart = $order->getCart();
+
+	$page = new Page([
+		'header'=>false,
+		'footer'=>false
+	]);
+
+	$page->setTpl("payment-paypal", [
+		'order'=>$order->getValues(),
+		'cart'=>$cart->getValues(),
+		'products'=>$cart->getProducts()
+	]);
+
+
+});
 
 
 $app->get("/login", function(){
@@ -954,45 +1013,6 @@ $app->post("/register", function(){
 
 	header('Location: /checkout');
 	exit;
-
-});
-
-$app->get("/forgot", function() {
-
-	$page = new Page();
-
-	$page->setTpl("forgot");	
-
-});
-
-$app->post("/forgot", function(){
-
-	$user = User::getForgot($_POST["email"], false);
-
-	header("Location: /forgot/sent");
-	exit;
-
-});
-
-$app->get("/forgot/sent", function(){
-
-	$page = new Page();
-
-	$page->setTpl("forgot-sent");	
-
-});
-
-
-$app->get("/forgot/reset", function(){
-
-	$user = User::validForgotDecrypt($_GET["code"]);
-
-	$page = new Page();
-
-	$page->setTpl("forgot-reset", array(
-		"name"=>$user["desperson"],
-		"code"=>$_GET["code"]
-	));
 
 });
 

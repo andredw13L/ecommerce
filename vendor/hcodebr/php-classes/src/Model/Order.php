@@ -8,7 +8,7 @@ use \Hcode\Model\Cart;
 
 class Order extends Model {
 
-	protected $fields = ["idstatus", "idorder", "idcart", "iduser", "idstatus", "idaddress", "vltotal", "idperson", "desperson","nrtotal", "desstatus", "desperson"
+	protected $fields = ["idstatus", "idorder", "idcart", "iduser", "idstatus", "idaddress", "vltotal", "idperson", "desperson","nrtotal", "desstatus", "desperson", "desnumber"
 	];
 
 	const SUCCESS = "Order-Success";

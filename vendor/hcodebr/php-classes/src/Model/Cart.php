@@ -12,7 +12,7 @@ use \Hcode\Model\Product;
 
 class Cart extends Model {
 
-	protected $fields = [ "idcart", "dessessionid", "iduser", "deszipcode", "vlfreight", "nrdays", "idproduct", "desurl", "vlweight", "vlwidth", "vlheight", "vllength", "desproduct", "vlprice", "dtremoved", "vltotal", "nrqtd", "vlsubtotal","desperson"
+	protected $fields = [ "idcart", "dessessionid", "iduser", "deszipcode", "vlfreight", "nrdays", "idproduct", "desurl", "vlweight", "vlwidth", "vlheight", "vllength", "desproduct", "vlprice", "dtremoved", "vltotal", "nrqtd", "vlsubtotal","desperson", "desnumber"
 	];
 
 	const SESSION = "Cart";

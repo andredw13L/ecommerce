@@ -7,7 +7,7 @@ use \Hcode\Model;
 
 class OrderStatus extends Model {
 
-	protected $fields = ["desstatus", "desperson"
+	protected $fields = ["desstatus", "desperson", "idcart", "desnumber"
 
 	];
 

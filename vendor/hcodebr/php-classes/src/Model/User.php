@@ -17,7 +17,7 @@ class User extends Model {
 	const SUCCESS = "UserSucesss";
 
 	protected $fields = [
-		"iduser", "idperson", "deslogin", "despassword", "inadmin", "dtergister", "desperson", "nrphone", "desemail", "idstatus", "idcart", "idaddress","idorder", "nrtotal"
+		"iduser", "idperson", "deslogin", "despassword", "inadmin", "dtergister", "desperson", "nrphone", "desemail", "idstatus", "idcart", "idaddress","idorder", "nrtotal", "desnumber"
 	];
 
 	public static function getFromSession()
