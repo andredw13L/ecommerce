@@ -7,8 +7,8 @@ use \Hcode\Model;
 
 class OrderStatus extends Model {
 
-	protected $fields = ["desstatus"
-	
+	protected $fields = ["desstatus", "desperson"
+
 	];
 
 	const EM_ABERTO = 1;
