@@ -12,7 +12,7 @@ use \Hcode\Model\Product;
 
 class Address extends Model {
 
-	protected $fields = ["idaddress", "idperson", "desaddress", "desnumber", "descomplement", "descity", "desstate", "descountry", "deszipcode","desdistrict"," desperson"
+	protected $fields = ["idaddress", "idperson", "desaddress", "desnumber", "descomplement", "descity", "desstate", "descountry", "deszipcode","desdistrict"," desperson", "idcart"
 	];
 
 const SESSION_ERROR = "AddressError";
